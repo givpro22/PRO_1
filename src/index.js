@@ -1,14 +1,21 @@
 import express from "express";
-import rootRouter from "../routers/rootRouter";
+import rootRouter from "./routers/rootRouter";
 import path from 'path';
+import "./db"
+import "./models/survey"
 
 const app = express();
-const PORT = 5000;
+const PORT = 4000;
+
 
 // 현재 디렉토리 경로
 const __dirname = path.resolve();
 
+app.set('view engine', 'ejs'); //set up
+app.set('views', process.cwd() + "/src/views")
+
 // 정적 파일 경로 설정
+app.use(express.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(express.static(path.join(__dirname, "views")));
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Report</title>
+</head>
+<body>
+    <h1>Survey Report</h1>
+
+    <% surveys.forEach(survey => { %>
+        <h3>Title: <%= survey.title %></h3>
+        <h3>Email: <%= survey.emailAdress %></h3>
+        <h3>Phone: <%= survey.phoneNumber %></h3>
+        <h3>Suggestions: <%= survey.Suggestions %></h3>
+        <h3>Date: <%= survey.date.toDateString() %></h3>
+        <hr>
+    <% }) %>
+</body>
+</html>
