@@ -1,6 +1,5 @@
 import express from "express";
-import Survey from "../models/survey";
-
+import { Report, postCoffee } from "../controllers/surveyController";
 
 const rootRouter = express.Router();
 
@@ -25,28 +24,6 @@ const CarShare = (req, res) => {
   return res.render("CarShare");
 };
 
-const report = async(req,res) => {
-  const surveys = await Survey.find({})
-  return res.render("survey",{surveys})
-}
-
-const postCoffee = async (req, res) => {
-  const {name,email,phone,feedback} = req.body
-
-  try {
-  await Survey.create({
-    name:name,
-    emailAdress: email,
-    phoneNumber: phone,
-    Suggestions: feedback,
-    date: Date.now()
-  })
-  return res.redirect('/');
-}
-  catch(error){
-    return res.sendFile(path.join(__dirname, 'src', 'views', 'coffee.html'));
-  }
-}
 
 
 rootRouter.get("/", home);
@@ -55,7 +32,8 @@ rootRouter.get("/Food", Food);
 rootRouter.get("/Bar", Bar);
 rootRouter.get("/CarShare", CarShare);
 rootRouter.post("/coffee", postCoffee)
-rootRouter.get("/CNU_report",report)
+rootRouter.get("/CNU_report",Report)
+
 export default rootRouter;
 
 

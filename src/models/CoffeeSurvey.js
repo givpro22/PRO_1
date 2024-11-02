@@ -5,9 +5,9 @@ const surveySchema = new mongoose.Schema({
     emailAdress: String,
     phoneNumber: String,
     Suggestions: String,
-    date: Date 
+    date: { type: Date, default: Date.now }
 
 })
 
-const Survey = mongoose.model("survey", surveySchema)
-export default Survey
+const CoffeeSurvey = mongoose.model("coffeeSurvey", surveySchema)
+export default CoffeeSurvey

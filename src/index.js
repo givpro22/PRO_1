@@ -2,10 +2,10 @@ import express from "express";
 import rootRouter from "./routers/rootRouter";
 import path from 'path';
 import "./db"
-import "./models/survey"
+import "./models/CoffeeSurvey"
 
 const app = express();
-const PORT = 4000;
+const PORT = 3000;
 
 
 // 현재 디렉토리 경로

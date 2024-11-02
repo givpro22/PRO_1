@@ -8,12 +8,12 @@
 <body>
     <h1>Survey Report</h1>
 
-    <% surveys.forEach(survey => { %>
-        <h3>Title: <%= survey.title %></h3>
-        <h3>Email: <%= survey.emailAdress %></h3>
-        <h3>Phone: <%= survey.phoneNumber %></h3>
-        <h3>Suggestions: <%= survey.Suggestions %></h3>
-        <h3>Date: <%= survey.date.toDateString() %></h3>
+    <% CoffeeReport.forEach(CoffeeReport => { %>
+        <h3>Name: <%= CoffeeReport.name %></h3>
+        <h3>Email: <%= CoffeeReport.emailAdress %></h3>
+        <h3>Phone: <%= CoffeeReport.phoneNumber %></h3>
+        <h3>Suggestions: <%= CoffeeReport.Suggestions %></h3>
+        <h3>Date: <%= CoffeeReport.date ? CoffeeReport.date.toLocaleString() : 'No Date Provided' %></h3>
         <hr>
     <% }) %>
 </body>
