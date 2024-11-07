@@ -1,0 +1,56 @@
+:root {
+    --primary-color: #ca4545;
+    --secondary-color: #ffffff;
+    --text-color: #333333;
+}
+
+body, html {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.navbar {
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: var(--primary-color) !important;
+    font-weight: bold;
+}
+
+.banner, .feedback-banner {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.card {
+    border: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    font-weight: bold;
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 1rem 0;
+    text-align: center;
+    margin-top: auto;
+}

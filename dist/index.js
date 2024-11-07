@@ -18,8 +18,7 @@ app.set('views', process.cwd() + "/src/views");
 app.use(_express["default"].urlencoded({
   extended: true
 }));
-app.use("/images", _express["default"]["static"](_path["default"].join(_dirname, "images")));
-app.use(_express["default"]["static"](_path["default"].join(_dirname, "views")));
+app.use(_express["default"]["static"](_path["default"].join(_dirname, "src", "public")));
 
 // 라우터 설정
 app.use("/", _rootRouter["default"]);
