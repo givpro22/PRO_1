@@ -2,7 +2,7 @@ import express from "express";
 import rootRouter from "./routers/rootRouter";
 import path from 'path';
 import "./db"
-import "./models/CoffeeSurvey"
+import "./models/Survey"
 
 const app = express();
 const PORT = 3000;

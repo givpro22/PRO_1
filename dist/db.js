@@ -3,7 +3,6 @@
 require("dotenv/config");
 var _mongoose = _interopRequireDefault(require("mongoose"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-console.log(process.env.DB_URL);
 _mongoose["default"].connect(process.env.DB_URL, {});
 var db = _mongoose["default"].connection;
 var handleOpen = function handleOpen() {

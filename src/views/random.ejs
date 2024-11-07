@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랜덤 이미지 선택기</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>랜덤 이미지 선택기</h1>
+    
+    <!-- 필터 선택 -->
+    <div>
+        <label for="location">위치:</label>
+        <select id="location">
+            <option value="campus">캠퍼스 주변</option>
+            <option value="downtown">도심</option>
+        </select>
+
+        <label for="category">카테고리:</label>
+        <select id="category">
+            <option value="korean">한식</option>
+            <option value="sushi">초밥</option>
+            <option value="chinese">중식</option>
+            <option value="thai">태국 음식</option>
+            <option value="italian">이탈리안</option>
+        </select>
+
+        <label for="allergy">알레르기:</label>
+        <select id="allergy">
+            <option value="none">없음</option>
+            <option value="vegan">비건 (고기 없음)</option>
+            <option value="pork">돼지고기</option>
+            <option value="milk">우유</option>
+            <option value="tree_nuts">견과류</option>
+            <option value="peanuts">땅콩</option>
+            <option value="eggs">계란</option>
+        </select>
+
+        <button onclick="displayImage()">랜덤돌리기</button>
+    </div>
+
+    <!-- 이미지 표시 영역 -->
+    <div id="image-display">
+        <!-- 선택된 이미지가 여기에 표시됩니다 -->
+    </div>
+
+    <script>
+        // 이미지 데이터 객체: 카테고리와 위치에 따라 이미지를 설정합니다
+        const images = {
+            campus: {
+                korean: ["chonnam_logo.png"],
+                sushi: ["sushi_campus1.jpg", "sushi_campus2.jpg"],
+                chinese: ["chinese_campus1.jpg", "chinese_campus2.jpg"],
+                thai: ["thai_campus1.jpg", "thai_campus2.jpg"],
+                italian: ["italian_campus1.jpg", "italian_campus2.jpg"]
+            },
+            downtown: {
+                korean: ["korean_downtown1.jpg", "korean_downtown2.jpg"],
+                sushi: ["sushi_downtown1.jpg", "sushi_downtown2.jpg"],
+                chinese: ["chinese_downtown1.jpg", "chinese_downtown2.jpg"],
+                thai: ["thai_downtown1.jpg", "thai_downtown2.jpg"],
+                italian: ["italian_downtown1.jpg", "italian_downtown2.jpg"]
+            }
+        };
+
+        function displayImage() {
+            const location = document.getElementById("location").value;
+            const category = document.getElementById("category").value;
+            const allergy = document.getElementById("allergy").value;
+
+            // 선택된 위치와 카테고리에 따른 이미지 배열 가져오기
+            let filteredImages = images[location]?.[category] || [];
+
+            // 알레르기에 맞게 이미지 필터링
+            if (allergy !== "none") {
+                filteredImages = filteredImages.filter(image => !image.includes(allergy));
+            }
+
+            // 필터링된 이미지가 있을 경우 랜덤으로 하나 선택하여 표시
+            if (filteredImages.length > 0) {
+                const randomImage = filteredImages[Math.floor(Math.random() * filteredImages.length)];
+                document.getElementById("image-display").innerHTML = `<img src="../../images/${randomImage}" alt="${category}">`;
+            } else {
+                document.getElementById("image-display").innerHTML = "<p>해당 조건에 맞는 이미지가 없습니다.</p>";
+            }
+        }
+    </script>
+</body>
+</html>

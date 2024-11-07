@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.FoodSurvey = exports.CoffeeSurvey = exports.CarShareSurvey = exports.BarSurvey = void 0;
 var _mongoose = _interopRequireDefault(require("mongoose"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var surveySchema = new _mongoose["default"].Schema({
@@ -11,7 +11,12 @@ var surveySchema = new _mongoose["default"].Schema({
   emailAdress: String,
   phoneNumber: String,
   Suggestions: String,
-  date: Date
+  date: {
+    type: Date,
+    "default": Date.now
+  }
 });
-var Survey = _mongoose["default"].model("survey", surveySchema);
-var _default = exports["default"] = Survey;
+var CoffeeSurvey = exports.CoffeeSurvey = _mongoose["default"].model("coffeesurvey", surveySchema);
+var FoodSurvey = exports.FoodSurvey = _mongoose["default"].model("FoodSurvey", surveySchema);
+var BarSurvey = exports.BarSurvey = _mongoose["default"].model("BarSurvey", surveySchema);
+var CarShareSurvey = exports.CarShareSurvey = _mongoose["default"].model("CarShareSurvey", surveySchema);

@@ -1,38 +1,27 @@
 import express from "express";
-import { Report, postCoffee } from "../controllers/surveyController";
+import { Random, Report, postBar, postCarShare, postCoffee, postFood } from "../controllers/surveyController";
+import { home, coffee, Food, Bar, CarShare } from "../controllers/controller";
 
 const rootRouter = express.Router();
 
-// Route Handlers
-const home = (req, res) => {
-  return res.render("index");
-};
-
-const coffee = (req, res) => {
-  return res.render("coffee");
-};
-
-const Food = (req, res) => {
-  return res.render("Food");
-};
-
-const Bar = (req, res) => {
-  return res.render("index");
-};
-
-const CarShare = (req, res) => {
-  return res.render("CarShare");
-};
-
-
-
 rootRouter.get("/", home);
+
 rootRouter.get("/coffee", coffee);
-rootRouter.get("/Food", Food);
-rootRouter.get("/Bar", Bar);
-rootRouter.get("/CarShare", CarShare);
 rootRouter.post("/coffee", postCoffee)
+
+rootRouter.get("/food", Food);
+rootRouter.post("/food", postFood)
+
+rootRouter.get("/bar", Bar);
+rootRouter.post("/bar", postBar)
+
+rootRouter.get("/carshare", CarShare);
+rootRouter.post("/carshare", postCarShare)
+
 rootRouter.get("/CNU_report",Report)
+
+rootRouter.get("/random",Random)
+
 
 export default rootRouter;
 

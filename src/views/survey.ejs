@@ -4,17 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Survey Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styling */
+        :root {
+            --primary-color: #28a745;
+            --secondary-color: #ffffff;
+        }
+        body, html {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h3 {
+            color: var(--primary-color);
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .report-section {
+            margin-bottom: 2rem;
+        }
+        .report-item {
+            background-color: #f1f1f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .btn-link {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+        .count-text {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .back-home {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .back-home:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1>Survey Report</h1>
 
-    <% CoffeeReport.forEach(CoffeeReport => { %>
-        <h3>Name: <%= CoffeeReport.name %></h3>
-        <h3>Email: <%= CoffeeReport.emailAdress %></h3>
-        <h3>Phone: <%= CoffeeReport.phoneNumber %></h3>
-        <h3>Suggestions: <%= CoffeeReport.Suggestions %></h3>
-        <h3>Date: <%= CoffeeReport.date ? CoffeeReport.date.toLocaleString() : 'No Date Provided' %></h3>
-        <hr>
-    <% }) %>
+<div class="container">
+    <h1 class="text-center">Survey Report</h1>
+    <p class="text-center count-text">Total Responses: <%= CoffeeReport.length + FoodReport.length + BarReport.length + CarShareReport.length %></p>
+    
+    <!-- Go Back Home Button -->
+    <a href="/" class="back-home">Go Back Home</a>
+
+    <!-- Coffee Survey Report Section -->
+    <div class="report-section">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#coffeeReport" aria-expanded="false">
+            Coffee Survey Report
+        </button>
+        <p class="count-text">Responses: <%= CoffeeReport.length %></p>
+        <div id="coffeeReport" class="collapse">
+            <% CoffeeReport.forEach(CoffeeReport => { %>
+                <div class="report-item">
+                    <h3>Name: <%= CoffeeReport.name %></h3>
+                    <p><strong>Email:</strong> <%= CoffeeReport.emailAdress %></p>
+                    <p><strong>Phone:</strong> <%= CoffeeReport.phoneNumber %></p>
+                    <p><strong>Suggestions:</strong> <%= CoffeeReport.Suggestions %></p>
+                    <p><strong>Date:</strong> <%= CoffeeReport.date ? CoffeeReport.date.toLocaleString() : 'No Date Provided' %></p>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <!-- Food Survey Report Section -->
+    <div class="report-section">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#foodReport" aria-expanded="false">
+            Food Survey Report
+        </button>
+        <p class="count-text">Responses: <%= FoodReport.length %></p>
+        <div id="foodReport" class="collapse">
+            <% FoodReport.forEach(FoodReport => { %>
+                <div class="report-item">
+                    <h3>Name: <%= FoodReport.name %></h3>
+                    <p><strong>Email:</strong> <%= FoodReport.emailAdress %></p>
+                    <p><strong>Phone:</strong> <%= FoodReport.phoneNumber %></p>
+                    <p><strong>Suggestions:</strong> <%= FoodReport.Suggestions %></p>
+                    <p><strong>Date:</strong> <%= FoodReport.date ? FoodReport.date.toLocaleString() : 'No Date Provided' %></p>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <!-- Bar Survey Report Section -->
+    <div class="report-section">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#barReport" aria-expanded="false">
+            Bar Survey Report
+        </button>
+        <p class="count-text">Responses: <%= BarReport.length %></p>
+        <div id="barReport" class="collapse">
+            <% BarReport.forEach(BarReport => { %>
+                <div class="report-item">
+                    <h3>Name: <%= BarReport.name %></h3>
+                    <p><strong>Email:</strong> <%= BarReport.emailAdress %></p>
+                    <p><strong>Phone:</strong> <%= BarReport.phoneNumber %></p>
+                    <p><strong>Suggestions:</strong> <%= BarReport.Suggestions %></p>
+                    <p><strong>Date:</strong> <%= BarReport.date ? BarReport.date.toLocaleString() : 'No Date Provided' %></p>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <!-- Car Share Report Section -->
+    <div class="report-section">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#carShareReport" aria-expanded="false">
+            Car Share Report
+        </button>
+        <p class="count-text">Responses: <%= CarShareReport.length %></p>
+        <div id="carShareReport" class="collapse">
+            <% CarShareReport.forEach(CarShareReport => { %>
+                <div class="report-item">
+                    <h3>Name: <%= CarShareReport.name %></h3>
+                    <p><strong>Email:</strong> <%= CarShareReport.emailAdress %></p>
+                    <p><strong>Phone:</strong> <%= CarShareReport.phoneNumber %></p>
+                    <p><strong>Suggestions:</strong> <%= CarShareReport.Suggestions %></p>
+                    <p><strong>Date:</strong> <%= CarShareReport.date ? CarShareReport.date.toLocaleString() : 'No Date Provided' %></p>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
