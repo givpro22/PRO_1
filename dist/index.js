@@ -5,6 +5,7 @@ var _rootRouter = _interopRequireDefault(require("./routers/rootRouter"));
 var _path = _interopRequireDefault(require("path"));
 require("./db");
 require("./models/Survey");
+require("./models/User");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var app = (0, _express["default"])();
 var PORT = 3000;

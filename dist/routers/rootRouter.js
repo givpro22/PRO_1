@@ -10,6 +10,9 @@ var _controller = require("../controllers/controller");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var rootRouter = _express["default"].Router();
 rootRouter.get("/", _controller.home);
+rootRouter.get("/login", _controller.login);
+rootRouter.get("/creatAccount", _controller.getCreatAccount);
+rootRouter.post("/creatAccount", _controller.postCreatAccount);
 rootRouter.get("/coffee", _controller.coffee);
 rootRouter.post("/coffee", _surveyController.postCoffee);
 rootRouter.get("/food", _controller.Food);

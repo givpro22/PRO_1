@@ -13,5 +13,3 @@ export const CoffeeSurvey = mongoose.model("coffeesurvey", surveySchema)
 export const FoodSurvey = mongoose.model("FoodSurvey", surveySchema)
 export const BarSurvey = mongoose.model("BarSurvey", surveySchema)
 export const CarShareSurvey = mongoose.model("CarShareSurvey", surveySchema)
-
-
