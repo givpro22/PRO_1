@@ -6,6 +6,8 @@ var _path = _interopRequireDefault(require("path"));
 require("./db");
 require("./models/Survey");
 require("./models/User");
+var _expressSession = _interopRequireDefault(require("express-session"));
+var _connectMongo = _interopRequireDefault(require("connect-mongo"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var app = (0, _express["default"])();
 var PORT = 3000;
@@ -16,10 +18,24 @@ app.set('view engine', 'ejs'); //set up
 app.set('views', process.cwd() + "/src/views");
 
 // 정적 파일 경로 설정
+app.use(_express["default"]["static"](_path["default"].join(_dirname, "src", "public")));
 app.use(_express["default"].urlencoded({
   extended: true
 }));
-app.use(_express["default"]["static"](_path["default"].join(_dirname, "src", "public")));
+app.use((0, _expressSession["default"])({
+  secret: process.env.COOKIE_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: _connectMongo["default"].create({
+    mongoUrl: process.env.DB_URL
+  })
+}));
+app.use(function (req, res, next) {
+  res.locals.loggedIn = req.session.loggedIn || false;
+  res.locals.loggedInUser = req.session.user;
+  console.log(res.locals);
+  next();
+});
 
 // 라우터 설정
 app.use("/", _rootRouter["default"]);

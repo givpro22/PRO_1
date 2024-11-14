@@ -75,12 +75,12 @@ export const postlogin = async (req, res) => {
   const {username, password} = req.body
   const user = await User.findOne({username})
   if (!user){
-    return res.status(400).render("login", { errorMessage: "아이디가 없음" });
+    return res.status(400).render("login", { errorMessage: "Username not found." });
   }
 
   const ok = await bcrypt.compare(password, user.password)
   if(!ok) {
-    return res.status(400).render("login", { errorMessage: "비번이 다름" });
+    return res.status(400).render("login", { errorMessage: "Incorrect password." });
   }
   req.session.loggedIn = true
   req.session.user= user
