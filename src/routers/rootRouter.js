@@ -1,6 +1,7 @@
 import express from "express";
 import { Random, Report, postBar, postCarShare, postCoffee, postFood } from "../controllers/surveyController";
 import { getlogin, postlogin, getjoin, postjoin, home, coffee, Food, Bar, CarShare } from "../controllers/controller";
+import { protectorMiddleware } from "../controllers/etcController";
 
 const rootRouter = express.Router();
 
@@ -23,8 +24,6 @@ rootRouter.post("/join", postjoin);
 rootRouter.get("/login", getlogin);
 rootRouter.post("/login", postlogin);
 
-
-
 rootRouter.get("/coffee", coffee);
 rootRouter.post("/coffee", postCoffee)
 
@@ -34,8 +33,8 @@ rootRouter.post("/food", postFood)
 rootRouter.get("/bar", Bar);
 rootRouter.post("/bar", postBar)
 
-rootRouter.get("/carshare", CarShare);
-rootRouter.post("/carshare", postCarShare)
+rootRouter.get("/carshare",protectorMiddleware, CarShare);
+rootRouter.post("/carshare",protectorMiddleware, postCarShare)
 
 rootRouter.get("/CNU_report",Report)
 
