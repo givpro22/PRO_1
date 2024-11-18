@@ -22,6 +22,33 @@ export const CarShare = (req, res) => {
 return res.render("CarShare");
 };
 
+export const getEdit = (req,res) => {
+  return res.render("edit-profile")
+}
+
+export const postEdit = async(req,res) => {
+  const {
+    session: {
+      user: { _id, avatarUrl },
+    },
+    body: { name, email, username, location },
+    file,   //file이 없을 수도 있기때문에
+  } = req;
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+  return res.redirect("/edit");
+};
 
 export const getjoin = (req, res) => {
   return res.render("join",{ errorMessage: null });
@@ -87,4 +114,5 @@ export const postlogin = async (req, res) => {
   console.log("로그인 완료!!")
   return res.redirect("/");
 };
+
 

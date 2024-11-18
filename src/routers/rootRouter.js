@@ -1,7 +1,8 @@
 import express from "express";
 import { Random, Report, postBar, postCarShare, postCoffee, postFood } from "../controllers/surveyController";
-import { getlogin, postlogin, getjoin, postjoin, home, coffee, Food, Bar, CarShare } from "../controllers/controller";
+import { getlogin, postlogin, getjoin, postjoin, home, coffee, Food, Bar, CarShare, getEdit, postEdit } from "../controllers/controller";
 import { protectorMiddleware } from "../controllers/etcController";
+import { uploadFiles } from "../middlewares";
 
 const rootRouter = express.Router();
 
@@ -20,6 +21,9 @@ rootRouter.get("/logout", (req, res) => {
 
 rootRouter.get("/join", getjoin);
 rootRouter.post("/join", postjoin);
+
+rootRouter.get("/edit",getEdit);
+rootRouter.post("/edit",uploadFiles.single("avatar"),postEdit);
 
 rootRouter.get("/login", getlogin);
 rootRouter.post("/login", postlogin);

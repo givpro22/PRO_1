@@ -7,6 +7,7 @@ import "./models/User"
 import session from "express-session"
 import MongoStore from "connect-mongo"
 
+
 const app = express();
 const PORT = 3000;
 
@@ -18,8 +19,13 @@ app.set('view engine', 'ejs'); //set up
 app.set('views', process.cwd() + "/src/views")
 
 // 정적 파일 경로 설정
+app.use("/uploads", express.static("uploads"));
+
 app.use(express.static(path.join(__dirname, "src", "public")));
 app.use(express.urlencoded({ extended: true }));
+
+
+// multer 미들웨어임
 
 
 
@@ -34,7 +40,7 @@ app.use(
 
 app.use((req, res, next) => {
   res.locals.loggedIn = req.session.loggedIn || false; 
-  res.locals.loggedInUser  = req.session.user
+  res.locals.loggedInUser  = req.session.user || {}
   console.log(res.locals)
   next()
 });
