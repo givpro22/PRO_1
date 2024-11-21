@@ -1,44 +1,121 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #4caf50;
+            object-fit: cover;
+        }
+        .profile-header h2 {
+            margin: 10px 0;
+            font-size: 1.5em;
+            color: #4caf50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-size: 1em;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="email"], input[type="file"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <img src="\<%= loggedInUser.avatarUrl %>" width="100" height="100">
-    <form method="POST" enctype="multipart/form-data">
-        <label for="avatar">Avatar</label>
-        <input type="file" id="avatar" name="avatar" accept="image/*">
-        
-        <input 
-            placeholder="Name" 
-            name="name" 
-            type="text" 
-            required 
-            value="<%= loggedInUser.name %>">
-        
-        <input 
-            placeholder="Email" 
-            name="email" 
-            type="email" 
-            required 
-            value="<%= loggedInUser.email %>">
-        
-        <input 
-            placeholder="Username" 
-            name="username" 
-            type="text" 
-            required 
-            value="<%= loggedInUser.username %>">
-        
-        <input 
-            placeholder="Location" 
-            name="location" 
-            type="text" 
-            required 
-            value="<%= loggedInUser.location %>">
-        
-        <input type="submit" value="Update Profile">
-    </form>
+    <div class="container">
+        <div class="profile-header">
+            <img src="<%= loggedInUser.avatarUrl %>" alt="Profile Picture">
+            <h2>Update Your Profile</h2>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            <label for="avatar">Avatar</label>
+            <input type="file" id="avatar" name="avatar" accept="image/*">
+
+            <label for="name">Name</label>
+            <input 
+                id="name"
+                placeholder="Name" 
+                name="name" 
+                type="text" 
+                required 
+                value="<%= loggedInUser.name %>">
+
+            <label for="email">Email</label>
+            <input 
+                id="email"
+                placeholder="Email" 
+                name="email" 
+                type="email" 
+                required 
+                value="<%= loggedInUser.email %>">
+
+            <label for="username">Username</label>
+            <input 
+                id="username"
+                placeholder="Username" 
+                name="username" 
+                type="text" 
+                required 
+                value="<%= loggedInUser.username %>">
+
+            <label for="location">Location</label>
+            <input 
+                id="location"
+                placeholder="Location" 
+                name="location" 
+                type="text" 
+                required 
+                value="<%= loggedInUser.location %>">
+
+            <input type="submit" value="Update Profile">
+        </form>
+    </div>
 </body>
 </html>

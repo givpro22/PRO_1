@@ -6,6 +6,7 @@ var _path = _interopRequireDefault(require("path"));
 require("./db");
 require("./models/Survey");
 require("./models/User");
+require("./models/Image");
 var _expressSession = _interopRequireDefault(require("express-session"));
 var _connectMongo = _interopRequireDefault(require("connect-mongo"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
@@ -18,10 +19,14 @@ app.set('view engine', 'ejs'); //set up
 app.set('views', process.cwd() + "/src/views");
 
 // 정적 파일 경로 설정
+app.use("/uploads", _express["default"]["static"]("uploads"));
 app.use(_express["default"]["static"](_path["default"].join(_dirname, "src", "public")));
 app.use(_express["default"].urlencoded({
   extended: true
 }));
+
+// multer 미들웨어임
+
 app.use((0, _expressSession["default"])({
   secret: process.env.COOKIE_SECRET,
   resave: false,
@@ -32,8 +37,7 @@ app.use((0, _expressSession["default"])({
 }));
 app.use(function (req, res, next) {
   res.locals.loggedIn = req.session.loggedIn || false;
-  res.locals.loggedInUser = req.session.user;
-  console.log(res.locals);
+  res.locals.loggedInUser = req.session.user || {};
   next();
 });
 

@@ -1,4 +1,6 @@
 import User from "../models/User";
+import Image from "../models/Image";
+
 import bcrypt from "bcrypt";
 
 
@@ -18,13 +20,34 @@ export const Bar = (req, res) => {
 return res.render("Bar");
 };
 
-export const CarShare = (req, res) => {
-return res.render("CarShare");
+export const CarShare = async (req, res) => {
+const images = await Image.find({}).sort({ createdAt: "desc" });
+
+return res.render("CarShare", {images});
 };
 
 export const getEdit = (req,res) => {
   return res.render("edit-profile")
 }
+
+export const getUpload = (req,res) => {
+  return res.render("upload")
+}
+
+export const postUpload = async (req, res) => {
+  const { file } = req;
+  try {
+    await Image.create({
+      fileUrl:file ? file.location : avatarUrl,
+      createUser:req.session.user.username
+    });
+    return res.redirect("/carshare");
+  } catch (error) {
+    console.log(error);
+    return res.status(400).render("CarShare");
+  }
+};
+
 
 export const postEdit = async(req,res) => {
   const {
@@ -38,7 +61,7 @@ export const postEdit = async(req,res) => {
     _id,
     
     {
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? file.location : avatarUrl,
       name,
       email,
       username,

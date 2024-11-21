@@ -16,6 +16,7 @@ var userSchema = new _mongoose["default"].Schema({
     type: String,
     unique: true
   },
+  avatarUrl: String,
   username: {
     type: String,
     unique: true

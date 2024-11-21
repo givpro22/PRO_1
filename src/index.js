@@ -4,6 +4,7 @@ import path from 'path';
 import "./db"
 import "./models/Survey"
 import "./models/User"
+import "./models/Image"
 import session from "express-session"
 import MongoStore from "connect-mongo"
 
@@ -41,7 +42,6 @@ app.use(
 app.use((req, res, next) => {
   res.locals.loggedIn = req.session.loggedIn || false; 
   res.locals.loggedInUser  = req.session.user || {}
-  console.log(res.locals)
   next()
 });
 

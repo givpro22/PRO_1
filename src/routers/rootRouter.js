@@ -1,8 +1,8 @@
 import express from "express";
 import { Random, Report, postBar, postCarShare, postCoffee, postFood } from "../controllers/surveyController";
-import { getlogin, postlogin, getjoin, postjoin, home, coffee, Food, Bar, CarShare, getEdit, postEdit } from "../controllers/controller";
+import { getlogin, postlogin, getjoin, postjoin, home, coffee, Food, Bar, CarShare, getEdit, postEdit, getUpload, postUpload } from "../controllers/controller";
 import { protectorMiddleware } from "../controllers/etcController";
-import { uploadFiles } from "../middlewares";
+import { avataruploadFiles, imageuploadFiles } from "../middlewares";
 
 const rootRouter = express.Router();
 
@@ -19,11 +19,12 @@ rootRouter.get("/logout", (req, res) => {
   })
 
 
+
 rootRouter.get("/join", getjoin);
 rootRouter.post("/join", postjoin);
 
 rootRouter.get("/edit",getEdit);
-rootRouter.post("/edit",uploadFiles.single("avatar"),postEdit);
+rootRouter.post("/edit",avataruploadFiles.single("avatar"),postEdit);
 
 rootRouter.get("/login", getlogin);
 rootRouter.post("/login", postlogin);
@@ -38,7 +39,7 @@ rootRouter.get("/bar", Bar);
 rootRouter.post("/bar", postBar)
 
 rootRouter.get("/carshare",protectorMiddleware, CarShare);
-rootRouter.post("/carshare",protectorMiddleware, postCarShare)
+rootRouter.post("/carshare",protectorMiddleware,imageuploadFiles.single("image"), postUpload)
 
 rootRouter.get("/CNU_report",Report)
 

@@ -8,6 +8,7 @@ var _express = _interopRequireDefault(require("express"));
 var _surveyController = require("../controllers/surveyController");
 var _controller = require("../controllers/controller");
 var _etcController = require("../controllers/etcController");
+var _middlewares = require("../middlewares");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var rootRouter = _express["default"].Router();
 rootRouter.get("/", _controller.home);
@@ -22,6 +23,8 @@ rootRouter.get("/logout", function (req, res) {
 });
 rootRouter.get("/join", _controller.getjoin);
 rootRouter.post("/join", _controller.postjoin);
+rootRouter.get("/edit", _controller.getEdit);
+rootRouter.post("/edit", _middlewares.avataruploadFiles.single("avatar"), _controller.postEdit);
 rootRouter.get("/login", _controller.getlogin);
 rootRouter.post("/login", _controller.postlogin);
 rootRouter.get("/coffee", _controller.coffee);
@@ -31,7 +34,7 @@ rootRouter.post("/food", _surveyController.postFood);
 rootRouter.get("/bar", _controller.Bar);
 rootRouter.post("/bar", _surveyController.postBar);
 rootRouter.get("/carshare", _etcController.protectorMiddleware, _controller.CarShare);
-rootRouter.post("/carshare", _etcController.protectorMiddleware, _surveyController.postCarShare);
+rootRouter.post("/carshare", _etcController.protectorMiddleware, _middlewares.imageuploadFiles.single("image"), _controller.postUpload);
 rootRouter.get("/CNU_report", _surveyController.Report);
 rootRouter.get("/random", _surveyController.Random);
 var _default = exports["default"] = rootRouter;
