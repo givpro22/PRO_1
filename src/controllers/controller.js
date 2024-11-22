@@ -20,19 +20,18 @@ export const Bar = (req, res) => {
 return res.render("Bar");
 };
 
-export const CarShare = async (req, res) => {
-const images = await Image.find({}).sort({ createdAt: "desc" });
 
-return res.render("CarShare", {images});
-};
 
 export const getEdit = (req,res) => {
   return res.render("edit-profile")
 }
 
-export const getUpload = (req,res) => {
-  return res.render("upload")
-}
+
+export const CarShare = async (req, res) => {
+  const images = await Image.find({}).sort({ createdAt: "desc" });
+  return res.render("CarShare", {images});
+  };
+
 
 export const postUpload = async (req, res) => {
   const { file } = req;

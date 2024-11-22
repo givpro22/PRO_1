@@ -4,62 +4,73 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>Interactive Map</title>
+    <title>Interactive Map with Image Upload</title>
     <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4g9jmh77mh&language=en"></script>
     <style>
-        /* Fullscreen map styling */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
         }
+
         #map {
             width: 100%;
             height: 100%;
         }
 
-        /* InfoWindow styling */
         .info-window {
-            width: 280px;
-            text-align: center;
-            padding: 15px;
+            width: 320px;
+            padding: 10px;
             background-color: #f9f9f9;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            font-family: 'Arial', sans-serif;
-            transition: all 0.3s ease-in-out;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .info-window img {
+
+        .image-slider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .image-slider div {
+            cursor: pointer;
+        }
+
+        .left-image, .right-image {
+            width: 80px;
+            height: 80px;
+            overflow: hidden;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+
+        .main-image {
+            width: 200px;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .image-slider img {
             width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            transition: transform 0.2s ease;
+            height: 100%;
+            object-fit: cover;
         }
-        .info-window img:hover {
-            transform: scale(1.05);
-        }
-        .info-window h3 {
-            margin: 0;
-            font-size: 20px;
-            color: #333;
-        }
-        .info-window p {
+
+        h3 {
             margin: 8px 0;
-            font-size: 14px;
-            color: #666;
         }
-        .info-window form label {
-            font-size: 12px;
-            color: #555;
-            display: block;
-            margin-bottom: 5px;
-        }
+
+        /* File upload button */
         .info-window form input[type="file"] {
             margin-bottom: 10px;
             font-size: 12px;
         }
+
         .info-window form input[type="submit"] {
             background-color: #4CAF50;
             color: white;
@@ -70,43 +81,28 @@
             font-size: 14px;
             transition: background-color 0.3s ease;
         }
+
         .info-window form input[type="submit"]:hover {
             background-color: #45a049;
-        }
-
-        /* User location marker style */
-        .user-marker {
-            width: 20px;
-            height: 20px;
-            background-color: blue;
-            border-radius: 50%;
-            border: 2px solid white;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
         }
     </style>
 </head>
 <body>
 
-<div id="map"></div>
+<div id="map" data-images='<%= JSON.stringify(images) %>'></div>
 
 <script>
     // Initialize the map
     const mapOptions = {
         center: new naver.maps.LatLng(35.174444, 126.908611),
         zoom: 15,
-        logoControl: false,
-        mapTypeId: naver.maps.MapTypeId.NORMAL
+        logoControl: false
     };
     const map = new naver.maps.Map('map', mapOptions);
+
+    // Get images from data attribute (for initial images)
+    const mapElement = document.getElementById('map');
+    const images = JSON.parse(mapElement.getAttribute('data-images'));
 
     // Create a marker
     const createMarker = (position, icon) => {
@@ -117,31 +113,80 @@
         });
     };
 
-    // Create InfoWindow content
+    // Create InfoWindow with Image Slider
     const createInfoWindowContent = () => {
         const container = document.createElement('div');
         container.className = 'info-window';
 
-        const img = document.createElement('img');
-        img.src = "<%= images.length > 0 ? images[0].fileUrl : '' %>"; // Replace with actual image URL
-        img.alt = "Logo";
-        container.appendChild(img);
+        const sliderContainer = document.createElement('div');
+        sliderContainer.className = 'image-slider';
 
+        let currentIndex = 0;
+
+        // Create title element for the info window
         const title = document.createElement('h3');
-        title.textContent = "전남대학교";
+        title.textContent = "Uploaded by: " + (images.length > 0 ? images[currentIndex].createUser : "Unknown");
         container.appendChild(title);
 
-        const description = document.createElement('p');
-        description.textContent = "광주 캠퍼스";
-        container.appendChild(description);
+        // Function to update the image slider
+        const updateSlider = () => {
+            const mainImage = sliderContainer.querySelector('.main-image img');
+            const leftImage = sliderContainer.querySelector('.left-image img');
+            const rightImage = sliderContainer.querySelector('.right-image img');
 
+            mainImage.src = images[currentIndex].fileUrl;
+            leftImage.src = images[(currentIndex - 1 + images.length) % images.length].fileUrl;
+            rightImage.src = images[(currentIndex + 1) % images.length].fileUrl;
+
+            // Update the title text
+            title.textContent = "Uploaded by: " + (images.length > 0 ? images[currentIndex].createUser : "Unknown");
+        };
+
+        // Left Image
+        const leftDiv = document.createElement('div');
+        leftDiv.className = 'left-image';
+        const leftImg = document.createElement('img');
+        leftDiv.appendChild(leftImg);
+        sliderContainer.appendChild(leftDiv);
+
+        // Main Image
+        const mainDiv = document.createElement('div');
+        mainDiv.className = 'main-image';
+        const mainImg = document.createElement('img');
+        mainDiv.appendChild(mainImg);
+        sliderContainer.appendChild(mainDiv);
+
+        // Right Image
+        const rightDiv = document.createElement('div');
+        rightDiv.className = 'right-image';
+        const rightImg = document.createElement('img');
+        rightDiv.appendChild(rightImg);
+        sliderContainer.appendChild(rightDiv);
+
+        // Add navigation for the slider
+        leftDiv.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateSlider();
+        });
+
+        rightDiv.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateSlider();
+        });
+
+        // Initialize Slider
+        updateSlider();
+
+        container.appendChild(sliderContainer);
+
+        // Create file upload form
         const form = document.createElement('form');
         form.method = "POST";
         form.enctype = "multipart/form-data";
 
         const label = document.createElement('label');
         label.htmlFor = "image";
-        label.textContent = "<%= images.length > 0 ? images[0].createUser : '' %>"; // Replace with actual user data
+        label.textContent = "Upload an Image:";
         form.appendChild(label);
 
         const inputFile = document.createElement('input');
@@ -162,7 +207,7 @@
         return container;
     };
 
-    // Add InfoWindow to marker
+    // Add InfoWindow to the marker
     const addInfoWindowToMarker = (marker) => {
         const infoWindow = new naver.maps.InfoWindow({
             content: createInfoWindowContent()
@@ -179,27 +224,9 @@
         });
     };
 
-    // Main marker for 전남대학교
+    // Add a main marker to the map
     const mainMarker = createMarker(new naver.maps.LatLng(35.174444, 126.908611));
     addInfoWindowToMarker(mainMarker);
-
-    // User location marker
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                createMarker(userLocation, {
-                    content: '<div class="user-marker"></div>',
-                    anchor: new naver.maps.Point(10, 10)
-                });
-            },
-            (error) => {
-                console.error("Failed to get user location:", error);
-            }
-        );
-    } else {
-        alert("Geolocation is not supported by your browser.");
-    }
 </script>
 
 </body>

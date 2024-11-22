@@ -1,6 +1,6 @@
 import express from "express";
 import { Random, Report, postBar, postCarShare, postCoffee, postFood } from "../controllers/surveyController";
-import { getlogin, postlogin, getjoin, postjoin, home, coffee, Food, Bar, CarShare, getEdit, postEdit, getUpload, postUpload } from "../controllers/controller";
+import { getlogin, postlogin, getjoin, postjoin, home, coffee, Food, Bar, CarShare, getEdit, postEdit, postUpload } from "../controllers/controller";
 import { protectorMiddleware } from "../controllers/etcController";
 import { avataruploadFiles, imageuploadFiles } from "../middlewares";
 
