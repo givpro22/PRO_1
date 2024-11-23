@@ -34,11 +34,15 @@ export const CarShare = async (req, res) => {
 
 
 export const postUpload = async (req, res) => {
-  const { file } = req;
+  const { file, body: {rating} } = req;
   try {
     await Image.create({
       fileUrl:file ? file.location : avatarUrl,
-      createUser:req.session.user.username
+      createUser:req.session.user.username,
+      createuserCountry:req.session.user.location,
+      meta: {
+        rating: Number(rating)
+      }
     });
     return res.redirect("/carshare");
   } catch (error) {

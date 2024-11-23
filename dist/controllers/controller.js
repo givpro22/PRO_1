@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.postlogin = exports.postjoin = exports.postUpload = exports.postEdit = exports.home = exports.getlogin = exports.getjoin = exports.getUpload = exports.getEdit = exports.coffee = exports.Food = exports.CarShare = exports.Bar = void 0;
+exports.postlogin = exports.postjoin = exports.postUpload = exports.postEdit = exports.home = exports.getlogin = exports.getjoin = exports.getEdit = exports.coffee = exports.Food = exports.CarShare = exports.Bar = void 0;
 var _User = _interopRequireDefault(require("../models/User"));
 var _Image = _interopRequireDefault(require("../models/Image"));
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
@@ -23,6 +23,9 @@ var Food = exports.Food = function Food(req, res) {
 };
 var Bar = exports.Bar = function Bar(req, res) {
   return res.render("Bar");
+};
+var getEdit = exports.getEdit = function getEdit(req, res) {
+  return res.render("edit-profile");
 };
 var CarShare = exports.CarShare = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
@@ -49,24 +52,22 @@ var CarShare = exports.CarShare = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
-var getEdit = exports.getEdit = function getEdit(req, res) {
-  return res.render("edit-profile");
-};
-var getUpload = exports.getUpload = function getUpload(req, res) {
-  return res.render("upload");
-};
 var postUpload = exports.postUpload = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var file;
+    var file, rating;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          file = req.file;
+          file = req.file, rating = req.body.rating;
           _context2.prev = 1;
           _context2.next = 4;
           return _Image["default"].create({
             fileUrl: file ? file.location : avatarUrl,
-            createUser: req.session.user.username
+            createUser: req.session.user.username,
+            createuserCountry: req.session.user.location,
+            meta: {
+              rating: Number(rating)
+            }
           });
         case 4:
           return _context2.abrupt("return", res.redirect("/carshare"));

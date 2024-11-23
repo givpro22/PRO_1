@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>Interactive Map with Image Upload</title>
     <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4g9jmh77mh&language=en"></script>
@@ -65,10 +65,40 @@
             margin: 8px 0;
         }
 
-        /* File upload button */
+        .rating-container {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .rating-container .star {
+            font-size: 20px;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        .rating-container .star.selected {
+            color: #FFD700;
+        }
+
         .info-window form input[type="file"] {
             margin-bottom: 10px;
             font-size: 12px;
+        }
+
+        .preview-container {
+            margin: 10px 0;
+        }
+
+        .preview-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: none;
         }
 
         .info-window form input[type="submit"] {
@@ -92,7 +122,6 @@
 <div id="map" data-images='<%= JSON.stringify(images) %>'></div>
 
 <script>
-    // Initialize the map
     const mapOptions = {
         center: new naver.maps.LatLng(35.174444, 126.908611),
         zoom: 15,
@@ -100,11 +129,9 @@
     };
     const map = new naver.maps.Map('map', mapOptions);
 
-    // Get images from data attribute (for initial images)
     const mapElement = document.getElementById('map');
-    const images = JSON.parse(mapElement.getAttribute('data-images'));
+    const images = JSON.parse(mapElement.getAttribute('data-images')) || [];
 
-    // Create a marker
     const createMarker = (position, icon) => {
         return new naver.maps.Marker({
             position,
@@ -113,22 +140,27 @@
         });
     };
 
-    // Create InfoWindow with Image Slider
     const createInfoWindowContent = () => {
         const container = document.createElement('div');
         container.className = 'info-window';
 
+        // 이미지 슬라이더 생성
         const sliderContainer = document.createElement('div');
         sliderContainer.className = 'image-slider';
 
         let currentIndex = 0;
 
-        // Create title element for the info window
         const title = document.createElement('h3');
-        title.textContent = "Uploaded by: " + (images.length > 0 ? images[currentIndex].createUser : "Unknown");
+        title.textContent = images.length > 0 
+        ? `Uploaded by: ${images[currentIndex].createUser}, ${images[currentIndex].createuserCountry}`
+        : "Uploaded by: Unknown";
+    
         container.appendChild(title);
 
-        // Function to update the image slider
+        const ratingDisplay = document.createElement('div');
+        ratingDisplay.className = 'rating-display';
+        container.appendChild(ratingDisplay);
+
         const updateSlider = () => {
             const mainImage = sliderContainer.querySelector('.main-image img');
             const leftImage = sliderContainer.querySelector('.left-image img');
@@ -138,32 +170,33 @@
             leftImage.src = images[(currentIndex - 1 + images.length) % images.length].fileUrl;
             rightImage.src = images[(currentIndex + 1) % images.length].fileUrl;
 
-            // Update the title text
-            title.textContent = "Uploaded by: " + (images.length > 0 ? images[currentIndex].createUser : "Unknown");
+            title.textContent = images.length > 0 
+            ? `Uploaded by: ${images[currentIndex].createUser}, ${images[currentIndex].createuserCountry}`
+            : "Uploaded by: Unknown";
+        
+            // 별점 업데이트
+            const rating = images[currentIndex]?.meta?.rating || 0;
+            ratingDisplay.innerHTML = "⭐".repeat(rating) || "No rating yet";
         };
 
-        // Left Image
         const leftDiv = document.createElement('div');
         leftDiv.className = 'left-image';
         const leftImg = document.createElement('img');
         leftDiv.appendChild(leftImg);
         sliderContainer.appendChild(leftDiv);
 
-        // Main Image
         const mainDiv = document.createElement('div');
         mainDiv.className = 'main-image';
         const mainImg = document.createElement('img');
         mainDiv.appendChild(mainImg);
         sliderContainer.appendChild(mainDiv);
 
-        // Right Image
         const rightDiv = document.createElement('div');
         rightDiv.className = 'right-image';
         const rightImg = document.createElement('img');
         rightDiv.appendChild(rightImg);
         sliderContainer.appendChild(rightDiv);
 
-        // Add navigation for the slider
         leftDiv.addEventListener('click', () => {
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateSlider();
@@ -174,20 +207,46 @@
             updateSlider();
         });
 
-        // Initialize Slider
         updateSlider();
-
         container.appendChild(sliderContainer);
 
-        // Create file upload form
+        // 별점 입력 UI
+        const ratingContainer = document.createElement('div');
+        ratingContainer.className = "rating-container";
+
+        const ratingInput = document.createElement('input');
+        ratingInput.type = "hidden";
+        ratingInput.name = "rating"; // 숨겨진 input으로 별점 값 전송
+        ratingInput.value = "0"; // 기본값
+
+        let selectedRating = 0;
+
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.className = "star";
+            star.textContent = "★";
+            star.dataset.value = i;
+
+            star.addEventListener('click', () => {
+                selectedRating = i;
+                ratingInput.value = selectedRating; // 숨겨진 input 업데이트
+                Array.from(ratingContainer.children).forEach(s => {
+                    s.classList.toggle('selected', s.dataset.value <= i);
+                });
+            });
+
+            ratingContainer.appendChild(star);
+        }
+
+        container.appendChild(ratingContainer);
+
+        // 파일 업로드 폼
         const form = document.createElement('form');
         form.method = "POST";
         form.enctype = "multipart/form-data";
 
-        const label = document.createElement('label');
-        label.htmlFor = "image";
-        label.textContent = "Upload an Image:";
-        form.appendChild(label);
+        // hidden input 추가
+        form.appendChild(ratingInput);
 
         const inputFile = document.createElement('input');
         inputFile.type = "file";
@@ -195,19 +254,47 @@
         inputFile.required = true;
         inputFile.id = "image";
         inputFile.name = "image";
+
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'preview-container';
+
+        const previewImage = document.createElement('img');
+        previewContainer.appendChild(previewImage);
+
+        inputFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    previewImage.src = event.target.result;
+                    previewImage.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.style.display = 'none';
+            }
+        });
+
+        form.appendChild(previewContainer);
         form.appendChild(inputFile);
 
         const submitButton = document.createElement('input');
         submitButton.type = "submit";
         submitButton.value = "Upload Image";
-        form.appendChild(submitButton);
 
+        form.addEventListener('submit', (e) => {
+            if (selectedRating === 0) {
+                e.preventDefault();
+                alert("Please select a rating before uploading.");
+            }
+        });
+
+        form.appendChild(submitButton);
         container.appendChild(form);
 
         return container;
     };
 
-    // Add InfoWindow to the marker
     const addInfoWindowToMarker = (marker) => {
         const infoWindow = new naver.maps.InfoWindow({
             content: createInfoWindowContent()
@@ -224,7 +311,6 @@
         });
     };
 
-    // Add a main marker to the map
     const mainMarker = createMarker(new naver.maps.LatLng(35.174444, 126.908611));
     addInfoWindowToMarker(mainMarker);
 </script>

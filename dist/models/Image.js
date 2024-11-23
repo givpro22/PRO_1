@@ -14,6 +14,9 @@ var imageSchema = new _mongoose["default"].Schema({
   createUser: {
     type: String
   },
+  createuserCountry: {
+    type: String
+  },
   createdAt: {
     type: Date,
     required: true,
