@@ -12,7 +12,7 @@ await CoffeeSurvey.create({
     Suggestions: feedback,
     date: Date.now()
 })
-    return res.redirect('/');
+    return res.redirect('/carshare');
 }
 catch(error){
     return res.render("coffee"); }

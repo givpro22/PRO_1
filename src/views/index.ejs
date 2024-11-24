@@ -75,10 +75,8 @@
             <li class="nav-item"><a class="nav-link active" href="/login">login</a></li>
             <% } %>
           <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/coffee">Coffee</a></li>
-          <li class="nav-item"><a class="nav-link" href="/food">Food</a></li>
-          <li class="nav-item"><a class="nav-link" href="/bar">Bar</a></li>
-          <li class="nav-item"><a class="nav-link" href="/carshare">Car Share</a></li>
+          <li class="nav-item"><a class="nav-link" href="/carshare">Restaurants</a></li>
+          <li class="nav-item"><a class="nav-link" href="/carshare">Places</a></li>
         </ul>
       </div>
       <img src="/images/club_logo.png" height="40" alt="Club Logo" class="img-fluid ms-2">
@@ -88,45 +86,27 @@
   <!-- Banner -->
   <div class="container-fluid banner text-center">
     <h2>Explore the best of Chonnam National University!</h2>
-    <p class="lead">☕🍜🍻🚗 Discover coffee spots, dining options, bars, and car shares!</p>
+    <p class="lead">🍽️🗺️ Discover restaurants and great places around!</p>
   </div>
 
   <!-- Categories Section -->
   <div class="container my-5">
     <div class="row text-center">
-      <div class="col-6 col-md-3">
-        <div class="card shadow h-100" onclick="window.location.href='/coffee'">
-          <img src="./images/coffee.png" class="card-img-top img-fluid" alt="Coffee">
-          <div class="card-body">
-            <h5 class="card-title">Coffee</h5>
-            <p class="card-text">Discover popular coffee spots</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="card shadow h-100" onclick="window.location.href='/food'">
-          <img src="./images/food.png" class="card-img-top img-fluid" alt="Food">
-          <div class="card-body">
-            <h5 class="card-title">Food</h5>
-            <p class="card-text">Discover popular food spots</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="card shadow h-100" onclick="window.location.href='/bar'">
-          <img src="./images/Bar.png" class="card-img-top img-fluid" alt="Bar">
-          <div class="card-body">
-            <h5 class="card-title">Bar</h5>
-            <p class="card-text">Discover popular bar spots</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
+      <div class="col-6 col-md-6">
         <div class="card shadow h-100" onclick="window.location.href='/carshare'">
-          <img src="./images/CarShare.png" class="card-img-top img-fluid" alt="Car Share">
+          <img src="./images/coffee.png" class="card-img-top img-fluid" alt="Restaurants">
           <div class="card-body">
-            <h5 class="card-title">Car Share</h5>
-            <p class="card-text">Discover rides and explore together</p>
+            <h5 class="card-title">Restaurants</h5>
+            <p class="card-text">Discover popular dining spots</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-6">
+        <div class="card shadow h-100" onclick="window.location.href='/carshare'">
+          <img src="./images/CarShare.png" class="card-img-top img-fluid" alt="Places">
+          <div class="card-body">
+            <h5 class="card-title">Places</h5>
+            <p class="card-text">Discover must-visit spots</p>
           </div>
         </div>
       </div>

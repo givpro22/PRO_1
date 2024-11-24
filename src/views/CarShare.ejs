@@ -6,17 +6,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>Interactive Map with Image Upload</title>
     <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4g9jmh77mh&language=en"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">    
     <style>
+        
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
         }
-
+        
         #map {
             width: 100%;
             height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 피드백 폼 컨테이너 */
+        #feedback-form-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0; /* 기본적으로 숨김 */
+            height: 100%;
+            background-color: #ffffff;
+            overflow: hidden; /* 폼 내용을 완전히 숨김 */
+            padding: 0; /* 기본적으로 내부 여백 제거 */
+            transition: width 0.3s ease-in-out, padding 0.3s ease-in-out;
+            z-index: 9999;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        #feedback-form-container.open {
+            width: 30%;
+            max-width: 400px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            #feedback-form-container.open {
+                width: 100%; /* 화면 꽉 차게 */
+                max-width: none; /* max-width 제한 제거 */
+            }
+        }
+        
+        /* 피드백 버튼 */
+        #feedback-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 10000; /* 모든 요소 위에 표시 */
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback-form h4 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px; /* 제목 아래 여백 */
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .feedback-form .form-label {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .feedback-form .form-control {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 0.9rem;
+            margin-bottom: 15px; /* 입력 필드 간 간격 */
+        }
+        
+        .feedback-form textarea {
+            resize: none;
+        }
+        
+        .feedback-form button {
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background-color: #4CAF50;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .feedback-form button:hover {
+            background-color: #45a049;
+        }
+        
+        /* 모바일에서 피드백 버튼 */
+        #feedback-toggle-btn {
+            background-color: #28a745;
+            color: white;
+            font-size: 1.2rem;
+            padding: 10px 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        #feedback-toggle-btn:active {
+            transform: scale(0.95);
+        }
+        
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
         }
 
         .info-window {
@@ -121,7 +230,48 @@
 
 <div id="map" data-images='<%= JSON.stringify(images) %>'></div>
 
+<div id="feedback-form-container">
+    <div class="feedback-form">
+        <h4>Feedback Form</h4>
+        <form method="POST" action="/coffee">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+            </div>
+            <div class="mb-3">
+                <label for="feedback" class="form-label">Suggestions</label>
+                <textarea class="form-control" id="feedback" name="feedback" rows="4" placeholder="Enter your suggestions or feedback" required></textarea>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        &copy; 2024 Togather - All Rights Reserved
+    </footer>
+</div>
+
+<!-- 피드백 버튼 -->
+<button id="feedback-toggle-btn" class="btn btn-primary">Feedback</button>
+
 <script>
+    const feedbackToggleBtn = document.getElementById('feedback-toggle-btn');
+const feedbackFormContainer = document.getElementById('feedback-form-container');
+
+// 버튼 클릭 시 피드백 창 열기/닫기
+feedbackToggleBtn.addEventListener('click', () => {
+    feedbackFormContainer.classList.toggle('open');
+});
+
     const mapOptions = {
         center: new naver.maps.LatLng(35.174444, 126.908611),
         zoom: 15,
