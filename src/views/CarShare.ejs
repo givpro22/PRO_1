@@ -163,7 +163,15 @@
             overflow: hidden;
             border-radius: 8px;
         }
-
+        .image-info p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .rating-container .star {
+            font-size: 1.5rem;
+        }
+        
         .image-slider img {
             width: 100%;
             height: 100%;
@@ -293,124 +301,151 @@ feedbackToggleBtn.addEventListener('click', () => {
     const createInfoWindowContent = () => {
         const container = document.createElement('div');
         container.className = 'info-window';
-
+    
         // 이미지 슬라이더 생성
         const sliderContainer = document.createElement('div');
         sliderContainer.className = 'image-slider';
-
+    
         let currentIndex = 0;
-
-        const title = document.createElement('h3');
-        title.textContent = images.length > 0 
-        ? `Uploaded by: ${images[currentIndex].createUser}, ${images[currentIndex].createuserCountry}`
-        : "Uploaded by: Unknown";
+    
+        const title = document.createElement('div');
+        title.className = 'image-info';
+    
+        // 사용자 정보
+        const userInfo = document.createElement('p');
+        userInfo.className = 'user-info';
+        userInfo.innerHTML = `<strong>Uploaded by:</strong> ${
+            images.length > 0 ? images[currentIndex].createUser : "Unknown"
+        }`;
+    
+        // 국가 정보
+        const countryInfo = document.createElement('p');
+        countryInfo.className = 'country-info';
+        countryInfo.innerHTML = `<strong>Country:</strong> ${
+            images.length > 0 ? images[currentIndex].createuserCountry : "Unknown"
+        }`;
+    
+        // 업로드 날짜
+        const dateInfo = document.createElement('p');
+        dateInfo.className = 'date-info';
+        dateInfo.innerHTML = `<strong>Uploaded on:</strong> ${
+            images.length > 0
+                ? new Date(images[currentIndex].createdAt).toLocaleDateString()
+                : "Unknown"
+        }`;
+    
+        title.appendChild(userInfo);
+        title.appendChild(countryInfo);
+        title.appendChild(dateInfo);
     
         container.appendChild(title);
-
+    
+        // 별점 표시 추가
         const ratingDisplay = document.createElement('div');
         ratingDisplay.className = 'rating-display';
         container.appendChild(ratingDisplay);
-
+    
         const updateSlider = () => {
             const mainImage = sliderContainer.querySelector('.main-image img');
             const leftImage = sliderContainer.querySelector('.left-image img');
             const rightImage = sliderContainer.querySelector('.right-image img');
-
+    
             mainImage.src = images[currentIndex].fileUrl;
             leftImage.src = images[(currentIndex - 1 + images.length) % images.length].fileUrl;
             rightImage.src = images[(currentIndex + 1) % images.length].fileUrl;
-
-            title.textContent = images.length > 0 
-            ? `Uploaded by: ${images[currentIndex].createUser}, ${images[currentIndex].createuserCountry}`
-            : "Uploaded by: Unknown";
-        
+    
+            // 정보 업데이트
+            userInfo.innerHTML = `<strong>Uploaded by:</strong> ${
+                images[currentIndex].createUser || "Unknown"
+            }`;
+            countryInfo.innerHTML = `<strong>Country:</strong> ${
+                images[currentIndex].createuserCountry || "Unknown"
+            }`;
+            dateInfo.innerHTML = `<strong>Uploaded on:</strong> ${
+                images[currentIndex].createdAt
+                    ? new Date(images[currentIndex].createdAt).toLocaleDateString()
+                    : "Unknown"
+            }`;
+    
             // 별점 업데이트
             const rating = images[currentIndex]?.meta?.rating || 0;
             ratingDisplay.innerHTML = "⭐".repeat(rating) || "No rating yet";
         };
-
+    
         const leftDiv = document.createElement('div');
         leftDiv.className = 'left-image';
         const leftImg = document.createElement('img');
         leftDiv.appendChild(leftImg);
         sliderContainer.appendChild(leftDiv);
-
+    
         const mainDiv = document.createElement('div');
         mainDiv.className = 'main-image';
         const mainImg = document.createElement('img');
         mainDiv.appendChild(mainImg);
         sliderContainer.appendChild(mainDiv);
-
+    
         const rightDiv = document.createElement('div');
         rightDiv.className = 'right-image';
         const rightImg = document.createElement('img');
         rightDiv.appendChild(rightImg);
         sliderContainer.appendChild(rightDiv);
-
+    
         leftDiv.addEventListener('click', () => {
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateSlider();
         });
-
+    
         rightDiv.addEventListener('click', () => {
             currentIndex = (currentIndex + 1) % images.length;
             updateSlider();
         });
-
+    
         updateSlider();
         container.appendChild(sliderContainer);
-
-        // 별점 입력 UI
+    
+        // 별점 UI
         const ratingContainer = document.createElement('div');
-        ratingContainer.className = "rating-container";
-
+        ratingContainer.className = 'rating-container';
+    
         const ratingInput = document.createElement('input');
-        ratingInput.type = "hidden";
-        ratingInput.name = "rating"; // 숨겨진 input으로 별점 값 전송
-        ratingInput.value = "0"; // 기본값
-
-        let selectedRating = 0;
-
+        ratingInput.type = 'hidden';
+        ratingInput.name = 'rating';
+        ratingInput.value = '0';
+    
         for (let i = 1; i <= 5; i++) {
             const star = document.createElement('span');
-            star.className = "star";
-            star.textContent = "★";
+            star.className = 'star';
+            star.textContent = '★';
             star.dataset.value = i;
-
+    
             star.addEventListener('click', () => {
-                selectedRating = i;
-                ratingInput.value = selectedRating; // 숨겨진 input 업데이트
-                Array.from(ratingContainer.children).forEach(s => {
+                ratingInput.value = i;
+                Array.from(ratingContainer.children).forEach((s) => {
                     s.classList.toggle('selected', s.dataset.value <= i);
                 });
             });
-
+    
             ratingContainer.appendChild(star);
         }
-
+    
         container.appendChild(ratingContainer);
-
-        // 파일 업로드 폼
+    
+        // 이미지 업로드
         const form = document.createElement('form');
-        form.method = "POST";
-        form.enctype = "multipart/form-data";
-
-        // hidden input 추가
-        form.appendChild(ratingInput);
-
+        form.method = 'POST';
+        form.enctype = 'multipart/form-data';
+    
         const inputFile = document.createElement('input');
-        inputFile.type = "file";
-        inputFile.accept = "image/*";
+        inputFile.type = 'file';
+        inputFile.accept = 'image/*';
         inputFile.required = true;
-        inputFile.id = "image";
-        inputFile.name = "image";
-
+    
         const previewContainer = document.createElement('div');
         previewContainer.className = 'preview-container';
-
+    
         const previewImage = document.createElement('img');
         previewContainer.appendChild(previewImage);
-
+    
         inputFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -424,26 +459,21 @@ feedbackToggleBtn.addEventListener('click', () => {
                 previewImage.style.display = 'none';
             }
         });
-
+    
         form.appendChild(previewContainer);
         form.appendChild(inputFile);
-
+    
         const submitButton = document.createElement('input');
-        submitButton.type = "submit";
-        submitButton.value = "Upload Image";
-
-        form.addEventListener('submit', (e) => {
-            if (selectedRating === 0) {
-                e.preventDefault();
-                alert("Please select a rating before uploading.");
-            }
-        });
-
+        submitButton.type = 'submit';
+        submitButton.value = 'Upload Image';
+    
         form.appendChild(submitButton);
         container.appendChild(form);
-
+    
         return container;
     };
+    
+    
 
     const addInfoWindowToMarker = (marker) => {
         const infoWindow = new naver.maps.InfoWindow({
