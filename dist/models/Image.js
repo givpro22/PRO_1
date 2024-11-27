@@ -32,6 +32,9 @@ var imageSchema = new _mongoose["default"].Schema({
       "default": 0,
       required: true
     }
+  },
+  marker: {
+    type: Number
   }
 });
 var Image = _mongoose["default"].model("Image", imageSchema);

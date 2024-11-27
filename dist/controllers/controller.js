@@ -29,7 +29,7 @@ var getEdit = exports.getEdit = function getEdit(req, res) {
 };
 var CarShare = exports.CarShare = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var images;
+    var images, imagesByMarker;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -46,10 +46,17 @@ var CarShare = exports.CarShare = /*#__PURE__*/function () {
           _context.t0 = [];
         case 5:
           images = _context.t0;
+          // 이미지를 마커 ID별로 그룹화
+          imagesByMarker = images.reduce(function (acc, image) {
+            var markerId = image.marker || 0; // 마커 ID가 없는 경우 기본값 0
+            if (!acc[markerId]) acc[markerId] = [];
+            acc[markerId].push(image);
+            return acc;
+          }, {});
           return _context.abrupt("return", res.render("CarShare", {
-            images: images
+            imagesByMarker: JSON.stringify(imagesByMarker)
           }));
-        case 7:
+        case 8:
         case "end":
           return _context.stop();
       }
@@ -61,18 +68,19 @@ var CarShare = exports.CarShare = /*#__PURE__*/function () {
 }();
 var postUpload = exports.postUpload = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var file, rating;
+    var file, _req$body, rating, marker;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          file = req.file, rating = req.body.rating;
+          file = req.file, _req$body = req.body, rating = _req$body.rating, marker = _req$body.marker;
           _context2.prev = 1;
           _context2.next = 4;
           return _Image["default"].create({
             fileUrl: file ? file.location : null,
-            // 파일이 없으면 null로 처리
             createUser: req.session.user.username,
             createuserCountry: req.session.user.location,
+            marker: Number(marker) || 0,
+            // 전달받은 마커 ID 저장
             meta: {
               rating: Number(rating) || 0 // 별점 없으면 0으로 처리
             }
@@ -98,11 +106,11 @@ var postUpload = exports.postUpload = /*#__PURE__*/function () {
 }();
 var postEdit = exports.postEdit = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
-    var _req$session$user, _id, avatarUrl, _req$body, name, email, username, location, file, updatedUser;
+    var _req$session$user, _id, avatarUrl, _req$body2, name, email, username, location, file, updatedUser;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          _req$session$user = req.session.user, _id = _req$session$user._id, avatarUrl = _req$session$user.avatarUrl, _req$body = req.body, name = _req$body.name, email = _req$body.email, username = _req$body.username, location = _req$body.location, file = req.file;
+          _req$session$user = req.session.user, _id = _req$session$user._id, avatarUrl = _req$session$user.avatarUrl, _req$body2 = req.body, name = _req$body2.name, email = _req$body2.email, username = _req$body2.username, location = _req$body2.location, file = req.file;
           _context3.next = 3;
           return _User["default"].findByIdAndUpdate(_id, {
             avatarUrl: file ? file.location : avatarUrl,
@@ -134,11 +142,11 @@ var getjoin = exports.getjoin = function getjoin(req, res) {
 };
 var postjoin = exports.postjoin = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
-    var _req$body2, name, email, username, password, password2, location, usernameExists, emailExists;
+    var _req$body3, name, email, username, password, password2, location, usernameExists, emailExists;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
-          _req$body2 = req.body, name = _req$body2.name, email = _req$body2.email, username = _req$body2.username, password = _req$body2.password, password2 = _req$body2.password2, location = _req$body2.location; // 각각 중복 여부 확인
+          _req$body3 = req.body, name = _req$body3.name, email = _req$body3.email, username = _req$body3.username, password = _req$body3.password, password2 = _req$body3.password2, location = _req$body3.location; // 각각 중복 여부 확인
           _context4.next = 3;
           return _User["default"].exists({
             username: username
@@ -217,11 +225,11 @@ var getlogin = exports.getlogin = function getlogin(req, res) {
 };
 var postlogin = exports.postlogin = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req, res) {
-    var _req$body3, username, password, user, ok;
+    var _req$body4, username, password, user, ok;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
-          _req$body3 = req.body, username = _req$body3.username, password = _req$body3.password;
+          _req$body4 = req.body, username = _req$body4.username, password = _req$body4.password;
           _context5.next = 3;
           return _User["default"].findOne({
             username: username
