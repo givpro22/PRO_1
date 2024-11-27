@@ -5,9 +5,9 @@ const imagesByMarker = JSON.parse(document.getElementById('map').getAttribute('d
 
 // 마커 생성 및 InfoWindow 추가
 const markers = [
-    createMarker(new naver.maps.LatLng(35.174444, 126.908611), map),
-    createMarker(new naver.maps.LatLng(35.173444, 126.908511), map),
-    createMarker(new naver.maps.LatLng(35.175000, 126.909000), map),
+    createMarker(new naver.maps.LatLng(35.174444, 126.908611), map, "수진식당"),
+    createMarker(new naver.maps.LatLng(35.173444, 126.908511), map, "연희식당"),
+    createMarker(new naver.maps.LatLng(35.175000, 126.909000), map, "한우전문점"),
 ];
 
 markers.forEach((marker) => {

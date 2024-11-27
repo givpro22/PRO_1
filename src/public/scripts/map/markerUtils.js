@@ -1,20 +1,25 @@
 import { createImageSlider } from './imageSlider.js';
 let markerIdCounter = 0; // 고유 마커 ID를 위한 카운터
 
-const createMarker = (position, map, icon = null) => {
+const createMarker = (position, map, name = "Unknown", icon = null) => {
     markerIdCounter += 1; // 마커마다 고유 번호 생성
     const marker = new naver.maps.Marker({
         position,
         map,
         icon,
         id: markerIdCounter, // 마커 고유 번호 부여
+        name, // 식당 이름 저장
     });
     return marker;
 };
 
-const createInfoWindowContent = (images, markerId) => {
+const createInfoWindowContent = (images, markerId, name) => {
     const container = document.createElement('div');
     container.className = 'info-window';
+
+    const nameElement = document.createElement('h3');
+    nameElement.textContent = name; // 식당 이름 표시
+    container.appendChild(nameElement);
 
     // 이미지 슬라이더 추가
     const slider = createImageSlider(images);
@@ -113,7 +118,7 @@ const createInfoWindowContent = (images, markerId) => {
 
 const addInfoWindowToMarker = (marker, map, images) => {
     const infoWindow = new naver.maps.InfoWindow({
-        content: createInfoWindowContent(images, marker.id),
+        content: createInfoWindowContent(images, marker.id,marker.name),
     });
 
     let isOpen = false;
