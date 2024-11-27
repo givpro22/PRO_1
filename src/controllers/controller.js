@@ -29,9 +29,17 @@ export const getEdit = (req,res) => {
 
 export const CarShare = async (req, res) => {
   const images = await Image.find({}).sort({ createdAt: "desc" }) || [];
-  return res.render("CarShare", { images });
-};
+  
+  // 이미지를 마커 ID별로 그룹화
+  const imagesByMarker = images.reduce((acc, image) => {
+      const markerId = image.marker || 0; // 마커 ID가 없는 경우 기본값 0
+      if (!acc[markerId]) acc[markerId] = [];
+      acc[markerId].push(image);
+      return acc;
+  }, {});
 
+  return res.render("CarShare", { imagesByMarker: JSON.stringify(imagesByMarker) });
+};
 
   export const postUpload = async (req, res) => {
     const { file, body: { rating, marker } } = req;
