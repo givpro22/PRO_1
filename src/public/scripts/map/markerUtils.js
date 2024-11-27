@@ -1,14 +1,18 @@
 import { createImageSlider } from './imageSlider.js';
+let markerIdCounter = 0; // 고유 마커 ID를 위한 카운터
 
 const createMarker = (position, map, icon = null) => {
-    return new naver.maps.Marker({
+    markerIdCounter += 1; // 마커마다 고유 번호 생성
+    const marker = new naver.maps.Marker({
         position,
         map,
         icon,
+        id: markerIdCounter, // 마커 고유 번호 부여
     });
+    return marker;
 };
 
-const createInfoWindowContent = (images) => {
+const createInfoWindowContent = (images, markerId) => {
     const container = document.createElement('div');
     container.className = 'info-window';
 
@@ -25,6 +29,8 @@ const createInfoWindowContent = (images) => {
     ratingInput.name = 'rating';
     ratingInput.value = '0'; // 기본 별점 값
 
+
+    
     for (let i = 1; i <= 5; i++) {
         const star = document.createElement('span');
         star.className = 'star';
@@ -50,6 +56,15 @@ const createInfoWindowContent = (images) => {
     form.enctype = 'multipart/form-data';
 
     form.appendChild(ratingInput); // 폼에 숨겨진 별점 값 추가
+
+
+    // 숨겨진 마커 ID 필드 추가
+    const markerInput = document.createElement('input');
+    markerInput.type = 'hidden';
+    markerInput.name = 'marker';
+    markerInput.value = markerId; // 마커 ID 값 추가
+    form.appendChild(markerInput);
+
 
     // 파일 업로드 input
     const inputFile = document.createElement('input');
@@ -98,7 +113,7 @@ const createInfoWindowContent = (images) => {
 
 const addInfoWindowToMarker = (marker, map, images) => {
     const infoWindow = new naver.maps.InfoWindow({
-        content: createInfoWindowContent(images),
+        content: createInfoWindowContent(images, marker.id),
     });
 
     let isOpen = false;

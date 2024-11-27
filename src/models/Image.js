@@ -9,6 +9,7 @@ const imageSchema = new mongoose.Schema({
     views: { type: Number, default: 0, required: true },
     rating: { type: Number, default: 0, required: true },
   },
+  marker: {type:Number}
 });
 
 

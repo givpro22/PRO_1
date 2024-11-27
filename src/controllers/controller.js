@@ -34,13 +34,14 @@ export const CarShare = async (req, res) => {
 
 
   export const postUpload = async (req, res) => {
-    const { file, body: { rating } } = req;
+    const { file, body: { rating, marker } } = req;
 
     try {
         await Image.create({
-            fileUrl: file ? file.location : null, // 파일이 없으면 null로 처리
+            fileUrl: file ? file.location : null,
             createUser: req.session.user.username,
             createuserCountry: req.session.user.location,
+            marker: Number(marker) || 0, // 전달받은 마커 ID 저장
             meta: {
                 rating: Number(rating) || 0, // 별점 없으면 0으로 처리
             }
