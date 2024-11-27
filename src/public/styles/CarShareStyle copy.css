@@ -1,0 +1,235 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* 피드백 폼 컨테이너 */
+#feedback-form-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0; /* 기본적으로 숨김 */
+    height: 100%;
+    background-color: #ffffff;
+    overflow: hidden; /* 폼 내용을 완전히 숨김 */
+    padding: 0; /* 기본적으로 내부 여백 제거 */
+    transition: width 0.3s ease-in-out, padding 0.3s ease-in-out;
+    z-index: 9999;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+#feedback-form-container.open {
+    width: 30%;
+    max-width: 400px;
+    padding: 20px; /* 폼 안 여백 추가 */
+}
+
+@media screen and (max-width: 768px) {
+    #feedback-form-container.open {
+        width: 100%; /* 화면 꽉 차게 */
+        max-width: none; /* max-width 제한 제거 */
+        padding: 20px; /* 모바일에서도 여백 유지 */
+    }
+}
+
+/* 피드백 버튼 */
+#feedback-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10000; /* 모든 요소 위에 표시 */
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-form h4 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 20px; /* 제목 아래 여백 */
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.feedback-form .form-label {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.feedback-form .form-control {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    margin-bottom: 15px; /* 입력 필드 간 간격 */
+}
+
+.feedback-form textarea {
+    resize: none;
+}
+
+.feedback-form button {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 6px;
+    background-color: #4CAF50;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.feedback-form button:hover {
+    background-color: #45a049;
+}
+
+/* 모바일에서 피드백 버튼 */
+#feedback-toggle-btn {
+    background-color: #28a745;
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    transition: transform 0.3s ease;
+}
+
+#feedback-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #777;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.info-window {
+    width: 320px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.image-slider div {
+    cursor: pointer;
+}
+
+.left-image, .right-image {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.main-image {
+    width: 200px;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.image-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+.rating-container .star {
+    font-size: 1.5rem;
+}
+
+.image-slider img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+h3 {
+    margin: 8px 0;
+}
+
+.rating-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.rating-container .star {
+    font-size: 20px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.rating-container .star.selected {
+    color: #FFD700;
+}
+
+.info-window form input[type="file"] {
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.preview-container {
+    margin: 10px 0;
+}
+
+.preview-container img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.info-window form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.info-window form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+
+
+
+
+
+
+
+
+

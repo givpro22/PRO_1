@@ -28,27 +28,28 @@ export const getEdit = (req,res) => {
 
 
 export const CarShare = async (req, res) => {
-  const images = await Image.find({}).sort({ createdAt: "desc" });
-  return res.render("CarShare", {images});
-  };
+  const images = await Image.find({}).sort({ createdAt: "desc" }) || [];
+  return res.render("CarShare", { images });
+};
 
 
-export const postUpload = async (req, res) => {
-  const { file, body: {rating} } = req;
-  try {
-    await Image.create({
-      fileUrl:file ? file.location : avatarUrl,
-      createUser:req.session.user.username,
-      createuserCountry:req.session.user.location,
-      meta: {
-        rating: Number(rating)
-      }
-    });
-    return res.redirect("/carshare");
-  } catch (error) {
-    console.log(error);
-    return res.status(400).render("CarShare");
-  }
+  export const postUpload = async (req, res) => {
+    const { file, body: { rating } } = req;
+
+    try {
+        await Image.create({
+            fileUrl: file ? file.location : null, // 파일이 없으면 null로 처리
+            createUser: req.session.user.username,
+            createuserCountry: req.session.user.location,
+            meta: {
+                rating: Number(rating) || 0, // 별점 없으면 0으로 처리
+            }
+        });
+        return res.redirect("/carshare");
+    } catch (error) {
+        console.log(error);
+        return res.status(400).render("CarShare", { errorMessage: "Failed to upload image." });
+    }
 };
 
 

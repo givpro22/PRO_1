@@ -26,7 +26,7 @@ var postCoffee = exports.postCoffee = /*#__PURE__*/function () {
             date: Date.now()
           });
         case 4:
-          return _context.abrupt("return", res.redirect('/'));
+          return _context.abrupt("return", res.redirect('/carshare'));
         case 7:
           _context.prev = 7;
           _context.t0 = _context["catch"](1);

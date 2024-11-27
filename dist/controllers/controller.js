@@ -38,11 +38,18 @@ var CarShare = exports.CarShare = /*#__PURE__*/function () {
             createdAt: "desc"
           });
         case 2:
-          images = _context.sent;
+          _context.t0 = _context.sent;
+          if (_context.t0) {
+            _context.next = 5;
+            break;
+          }
+          _context.t0 = [];
+        case 5:
+          images = _context.t0;
           return _context.abrupt("return", res.render("CarShare", {
             images: images
           }));
-        case 4:
+        case 7:
         case "end":
           return _context.stop();
       }
@@ -62,11 +69,12 @@ var postUpload = exports.postUpload = /*#__PURE__*/function () {
           _context2.prev = 1;
           _context2.next = 4;
           return _Image["default"].create({
-            fileUrl: file ? file.location : avatarUrl,
+            fileUrl: file ? file.location : null,
+            // 파일이 없으면 null로 처리
             createUser: req.session.user.username,
             createuserCountry: req.session.user.location,
             meta: {
-              rating: Number(rating)
+              rating: Number(rating) || 0 // 별점 없으면 0으로 처리
             }
           });
         case 4:
@@ -75,7 +83,9 @@ var postUpload = exports.postUpload = /*#__PURE__*/function () {
           _context2.prev = 7;
           _context2.t0 = _context2["catch"](1);
           console.log(_context2.t0);
-          return _context2.abrupt("return", res.status(400).render("CarShare"));
+          return _context2.abrupt("return", res.status(400).render("CarShare", {
+            errorMessage: "Failed to upload image."
+          }));
         case 11:
         case "end":
           return _context2.stop();

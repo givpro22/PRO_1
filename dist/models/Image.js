@@ -8,8 +8,7 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var imageSchema = new _mongoose["default"].Schema({
   fileUrl: {
-    type: String,
-    required: true
+    type: String
   },
   createUser: {
     type: String
